@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Resume Analyst</title>
+    <title>HireSight AI - Resume Analyzer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -25,28 +25,29 @@
         <section id="hero" class="hero-section">
             <nav class="navbar">
                 <div class="logo">
-                    <i data-lucide="cpu"></i>
-                    <span>ResuMinds.AI</span>
+                    <i data-lucide="scan-search"></i>
+                    <span>HireSight.AI</span>
                 </div>
-                <button class="btn-secondary">Login</button>
+                <button class="btn-secondary">Sign In</button>
             </nav>
 
             <div class="hero-content">
                 <h1 class="hero-title">
-                    <span class="reveal-text">Unlock Your</span><br>
-                    <span class="reveal-text gradient-text">Career Potential</span>
+                    See Your Resume Like a <span class="gradient-text">Recruiter</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Advanced AI-driven analysis to score your resume, identify gaps, and match you with your dream role.
+                    Get instant, AI-powered feedback on your resume. Identify gaps, optimize keywords, and land more
+                    interviews.
                 </p>
 
                 <div class="upload-container" id="drop-zone">
                     <div class="upload-content">
-                        <i data-lucide="upload-cloud" class="upload-icon"></i>
-                        <h3>Drop your resume here</h3>
-                        <p>PDF, DOCX up to 10MB</p>
+                        <i data-lucide="file-up" class="upload-icon"></i>
+                        <h3>Upload your resume</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Drag & drop or click to browse (PDF,
+                            DOCX)</p>
                         <label for="file-input" class="btn-primary" onclick="event.stopPropagation()">Select
-                            File</label>
+                            Document</label>
                     </div>
                     <div class="scanning-overlay"></div>
                 </div>
@@ -64,52 +65,69 @@
                     <div class="doc-line" style="width: 90%"></div>
                     <div class="doc-line" style="width: 70%"></div>
                     <div class="doc-line" style="width: 85%"></div>
+                    <div class="doc-line" style="width: 50%"></div>
+                    <div class="doc-line" style="width: 75%"></div>
                 </div>
             </div>
-            <h2 class="analysis-text">Analyzing Keywords...</h2>
+            <h2 class="analysis-text">Analyzing Content...</h2>
+            <p style="color: var(--text-muted);">Checking ATS compatibility and keyword density</p>
         </section>
 
         <!-- Dashboard Section -->
         <section id="dashboard" class="dashboard-section hidden">
             <header class="dashboard-header">
-                <h2>Analysis Report</h2>
-                <button class="btn-secondary" id="reset-btn">Analyze New</button>
+                <div>
+                    <h2>Analysis Results</h2>
+                    <p style="color: var(--text-muted);">Generated on Nov 24, 2025</p>
+                </div>
+                <button class="btn-secondary" id="reset-btn">Upload New</button>
             </header>
 
             <div class="dashboard-grid">
-                <!-- Overall Score -->
-                <div class="card score-card">
-                    <h3>Resume Score</h3>
-                    <div class="gauge-container">
-                        <canvas id="scoreChart"></canvas>
-                        <div class="score-display">
-                            <span id="score-value">0</span>
-                            <small>/ 100</small>
+                <!-- Left Column: Resume Preview -->
+                <div class="resume-preview-card">
+                    <h3>Document Preview</h3>
+                    <div
+                        style="width: 100%; height: 100%; background: #f3f4f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
+                        [Resume Preview Placeholder]
+                    </div>
+                </div>
+
+                <!-- Right Column: Analysis Data -->
+                <div class="analysis-column">
+                    <!-- Overall Score -->
+                    <div class="card score-card">
+                        <div class="score-content">
+                            <h3>Overall Score</h3>
+                            <div class="score-value-large" id="score-value">0</div>
+                            <p class="score-label" id="score-message">Calculating...</p>
+                        </div>
+                        <div class="score-chart-mini">
+                            <canvas id="scoreChart"></canvas>
                         </div>
                     </div>
-                    <p id="score-message" class="score-message">Excellent</p>
-                </div>
 
-                <!-- Skills Breakdown -->
-                <div class="card skills-card">
-                    <h3>Skills Gap Analysis</h3>
-                    <canvas id="skillsChart"></canvas>
-                </div>
-
-                <!-- Recommended Roles -->
-                <div class="card roles-card">
-                    <h3>Top Recommended Roles</h3>
-                    <div class="roles-list" id="roles-list">
-                        <!-- Roles injected via JS -->
+                    <!-- Skills Breakdown -->
+                    <div class="card skills-card">
+                        <h3>Skills Profile</h3>
+                        <canvas id="skillsChart" style="max-height: 250px;"></canvas>
                     </div>
-                </div>
 
-                <!-- Detailed Feedback -->
-                <div class="card feedback-card">
-                    <h3>Actionable Insights</h3>
-                    <ul class="feedback-list" id="feedback-list">
-                        <!-- Feedback injected via JS -->
-                    </ul>
+                    <!-- Recommended Roles -->
+                    <div class="card roles-card">
+                        <h3>Best Matched Roles</h3>
+                        <div class="roles-list" id="roles-list">
+                            <!-- Roles injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Detailed Feedback -->
+                    <div class="card feedback-card">
+                        <h3>Key Improvements</h3>
+                        <ul class="feedback-list" id="feedback-list">
+                            <!-- Feedback injected via JS -->
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
