@@ -17,7 +17,11 @@ gsap.from(".hero-subtitle", { y: 20, opacity: 0, duration: 0.8, delay: 0.4, ease
 gsap.from(".upload-container", { y: 40, opacity: 0, duration: 0.8, delay: 0.6, ease: "power2.out" });
 
 // Event Listeners for File Upload
-dropZone.addEventListener('click', () => fileInput.click());
+// Event Listeners for File Upload
+dropZone.addEventListener('click', () => {
+    fileInput.value = ''; // Reset value to ensure change event fires even for same file
+    fileInput.click();
+});
 
 dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
