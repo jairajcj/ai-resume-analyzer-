@@ -24,13 +24,6 @@ gsap.from(".hero-subtitle", { y: 20, opacity: 0, duration: 1, delay: 1 });
 gsap.from(".upload-container", { scale: 0.9, opacity: 0, duration: 1, delay: 1.2, ease: "elastic.out(1, 0.5)" });
 
 // Event Listeners for File Upload
-const selectBtn = document.querySelector('.upload-content .btn-primary');
-
-selectBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent triggering dropZone click if nested (though it's not anymore, good practice)
-    fileInput.click();
-});
-
 dropZone.addEventListener('click', () => fileInput.click());
 
 dropZone.addEventListener('dragover', (e) => {
