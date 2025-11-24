@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyst</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="background-gradient"></div>
+    <div class="grid-overlay"></div>
+
+    <main id="app">
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <nav class="navbar">
+                <div class="logo">
+                    <i data-lucide="cpu"></i>
+                    <span>ResuMinds.AI</span>
+                </div>
+                <button class="btn-secondary">Login</button>
+            </nav>
+
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="reveal-text">Unlock Your</span><br>
+                    <span class="reveal-text gradient-text">Career Potential</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Advanced AI-driven analysis to score your resume, identify gaps, and match you with your dream role.
+                </p>
+                
+                <div class="upload-container" id="drop-zone">
+                    <div class="upload-content">
+                        <i data-lucide="upload-cloud" class="upload-icon"></i>
+                        <h3>Drop your resume here</h3>
+                        <p>PDF, DOCX up to 10MB</p>
+                        <button class="btn-primary">Select File</button>
+                    </div>
+                    <input type="file" id="file-input" hidden accept=".pdf,.doc,.docx">
+                    <div class="scanning-overlay"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading / Analysis Section -->
+        <section id="analysis" class="analysis-section hidden">
+            <div class="scanner-container">
+                <div class="scanner-line"></div>
+                <div class="document-preview">
+                    <div class="doc-line" style="width: 80%"></div>
+                    <div class="doc-line" style="width: 60%"></div>
+                    <div class="doc-line" style="width: 90%"></div>
+                    <div class="doc-line" style="width: 70%"></div>
+                    <div class="doc-line" style="width: 85%"></div>
+                </div>
+            </div>
+            <h2 class="analysis-text">Analyzing Keywords...</h2>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard-section hidden">
+            <header class="dashboard-header">
+                <h2>Analysis Report</h2>
+                <button class="btn-secondary" id="reset-btn">Analyze New</button>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Overall Score -->
+                <div class="card score-card">
+                    <h3>Resume Score</h3>
+                    <div class="gauge-container">
+                        <canvas id="scoreChart"></canvas>
+                        <div class="score-display">
+                            <span id="score-value">0</span>
+                            <small>/ 100</small>
+                        </div>
+                    </div>
+                    <p id="score-message" class="score-message">Excellent</p>
+                </div>
+
+                <!-- Skills Breakdown -->
+                <div class="card skills-card">
+                    <h3>Skills Gap Analysis</h3>
+                    <canvas id="skillsChart"></canvas>
+                </div>
+
+                <!-- Recommended Roles -->
+                <div class="card roles-card">
+                    <h3>Top Recommended Roles</h3>
+                    <div class="roles-list" id="roles-list">
+                        <!-- Roles injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Detailed Feedback -->
+                <div class="card feedback-card">
+                    <h3>Actionable Insights</h3>
+                    <ul class="feedback-list" id="feedback-list">
+                        <!-- Feedback injected via JS -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
