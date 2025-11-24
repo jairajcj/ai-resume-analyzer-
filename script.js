@@ -12,18 +12,28 @@ const resetBtn = document.getElementById('reset-btn');
 
 // GSAP Animations
 gsap.from(".navbar", { y: -50, opacity: 0, duration: 1, ease: "power3.out" });
-gsap.from(".hero-title .reveal-text", { 
-    y: 100, 
-    opacity: 0, 
-    duration: 1, 
-    stagger: 0.2, 
-    ease: "power3.out", 
-    delay: 0.5 
+gsap.from(".hero-title .reveal-text", {
+    y: 100,
+    opacity: 0,
+    duration: 1,
+    stagger: 0.2,
+    ease: "power3.out",
+    delay: 0.5
 });
 gsap.from(".hero-subtitle", { y: 20, opacity: 0, duration: 1, delay: 1 });
 gsap.from(".upload-container", { scale: 0.9, opacity: 0, duration: 1, delay: 1.2, ease: "elastic.out(1, 0.5)" });
 
 // Event Listeners for File Upload
+const selectBtn = document.querySelector('.upload-content .btn-primary');
+
+// Prevent infinite loop since input is inside dropZone
+fileInput.addEventListener('click', (e) => e.stopPropagation());
+
+selectBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    fileInput.click();
+});
+
 dropZone.addEventListener('click', () => fileInput.click());
 
 dropZone.addEventListener('dragover', (e) => {
@@ -55,7 +65,7 @@ resetBtn.addEventListener('click', resetApp);
 function handleFileUpload(file) {
     // Simulate scanning effect on the drop zone
     dropZone.classList.add('scanning');
-    
+
     // Transition to Analysis Section after a short delay
     setTimeout(() => {
         transitionToAnalysis();
@@ -63,16 +73,16 @@ function handleFileUpload(file) {
 }
 
 function transitionToAnalysis() {
-    gsap.to(heroSection, { 
-        opacity: 0, 
-        y: -50, 
-        duration: 0.5, 
+    gsap.to(heroSection, {
+        opacity: 0,
+        y: -50,
+        duration: 0.5,
         onComplete: () => {
             heroSection.classList.add('hidden');
             analysisSection.classList.remove('hidden');
-            
-            gsap.fromTo(analysisSection, 
-                { opacity: 0, scale: 0.9 }, 
+
+            gsap.fromTo(analysisSection,
+                { opacity: 0, scale: 0.9 },
                 { opacity: 1, scale: 1, duration: 0.5 }
             );
 
@@ -80,7 +90,7 @@ function transitionToAnalysis() {
             setTimeout(() => {
                 transitionToDashboard();
             }, 3000);
-        } 
+        }
     });
 }
 
@@ -92,7 +102,7 @@ function transitionToDashboard() {
         onComplete: () => {
             analysisSection.classList.add('hidden');
             dashboardSection.classList.remove('hidden');
-            
+
             gsap.fromTo(dashboardSection,
                 { opacity: 0, y: 50 },
                 { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
@@ -124,7 +134,7 @@ function resetApp() {
             heroSection.classList.remove('hidden');
             dropZone.classList.remove('scanning');
             fileInput.value = ''; // Clear input
-            
+
             gsap.fromTo(heroSection,
                 { opacity: 0, y: -50 },
                 { opacity: 1, y: 0, duration: 0.5 }
@@ -138,11 +148,11 @@ function renderCharts() {
     // Score Gauge (Doughnut)
     const scoreCtx = document.getElementById('scoreChart').getContext('2d');
     const score = Math.floor(Math.random() * (98 - 75) + 75); // Random score 75-98
-    
+
     // Update Score Text
     const scoreValue = document.getElementById('score-value');
     const scoreMessage = document.getElementById('score-message');
-    
+
     // Animate Score Number
     let currentScore = 0;
     const scoreInterval = setInterval(() => {
@@ -252,7 +262,7 @@ function populateData() {
             <span>${item}</span>
         </li>
     `).join('');
-    
+
     // Re-initialize icons for new content
     lucide.createIcons();
 }
