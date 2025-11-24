@@ -14,6 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- PDF.js for PDF parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <body>
@@ -69,7 +71,7 @@
                 </div>
             </div>
             <h2 class="analysis-text">Analyzing Content...</h2>
-            <p style="color: var(--text-muted);">Checking ATS compatibility and keyword density</p>
+            <p style="color: var(--text-muted);">Extracting text and analyzing resume quality</p>
         </section>
 
         <!-- Dashboard Section -->
@@ -77,7 +79,7 @@
             <header class="dashboard-header">
                 <div>
                     <h2>Analysis Results</h2>
-                    <p style="color: var(--text-muted);">Generated on Nov 24, 2025</p>
+                    <p style="color: var(--text-muted);" id="filename-display">Analyzing your resume...</p>
                 </div>
                 <button class="btn-secondary" id="reset-btn">Upload New</button>
             </header>
@@ -86,9 +88,9 @@
                 <!-- Left Column: Resume Preview -->
                 <div class="resume-preview-card">
                     <h3>Document Preview</h3>
-                    <div
-                        style="width: 100%; height: 100%; background: #f3f4f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
-                        [Resume Preview Placeholder]
+                    <div id="resume-text-preview"
+                        style="width: 100%; height: 100%; background: #f3f4f6; border-radius: 8px; padding: 1.5rem; overflow-y: auto; max-height: 600px; font-size: 0.85rem; line-height: 1.6; color: #374151; white-space: pre-wrap;">
+                        [Resume text will appear here...]
                     </div>
                 </div>
 
