@@ -128,37 +128,36 @@ function resetApp() {
 
 // Chart.js & Data Population
 function renderCharts() {
-    // Score Gauge (Doughnut)
-    const scoreCtx = document.getElementById('scoreChart').getContext('2d');
-    const score = Math.floor(Math.random() * (95 - 78) + 78); // Random score 78-95
+    // 1. ATS Score (Doughnut)
+    const atsCtx = document.getElementById('atsChart').getContext('2d');
+    const atsScore = Math.floor(Math.random() * (98 - 85) + 85); // Random score 85-98
 
-    // Update Score Text
-    const scoreValue = document.getElementById('score-value');
-    const scoreMessage = document.getElementById('score-message');
+    // Update ATS Text
+    const atsValue = document.getElementById('ats-score');
+    const atsMessage = document.getElementById('ats-message');
 
-    // Animate Score Number
-    let currentScore = 0;
-    const scoreInterval = setInterval(() => {
-        if (currentScore >= score) {
-            clearInterval(scoreInterval);
+    // Animate ATS Number
+    let currentAts = 0;
+    const atsInterval = setInterval(() => {
+        if (currentAts >= atsScore) {
+            clearInterval(atsInterval);
         } else {
-            currentScore++;
-            scoreValue.textContent = currentScore;
+            currentAts++;
+            atsValue.textContent = currentAts;
         }
     }, 15);
 
     // Set Message
-    if (score > 90) scoreMessage.textContent = "Top 5% of candidates";
-    else if (score > 80) scoreMessage.textContent = "Strong match for role";
-    else scoreMessage.textContent = "Good foundation, needs polish";
+    if (atsScore > 90) atsMessage.textContent = "Excellent ATS Optimization";
+    else atsMessage.textContent = "Good, but needs keyword tuning";
 
-    new Chart(scoreCtx, {
+    new Chart(atsCtx, {
         type: 'doughnut',
         data: {
             labels: ['Score', 'Gap'],
             datasets: [{
-                data: [score, 100 - score],
-                backgroundColor: ['#2563eb', '#e5e7eb'], // Blue & Light Grey
+                data: [atsScore, 100 - atsScore],
+                backgroundColor: ['#ffffff', 'rgba(255, 255, 255, 0.2)'], // White for contrast on blue card
                 borderWidth: 0,
                 cutout: '75%',
             }]
@@ -171,36 +170,39 @@ function renderCharts() {
         }
     });
 
-    // Skills Radar Chart
-    const skillsCtx = document.getElementById('skillsChart').getContext('2d');
-    new Chart(skillsCtx, {
-        type: 'bar', // Changed to Bar for cleaner look in small space
-        data: {
-            labels: ['Python', 'ML Ops', 'Data Viz', 'Comm.', 'System Design'],
-            datasets: [{
-                label: 'Your Level',
-                data: [90, 75, 85, 95, 70],
-                backgroundColor: '#2563eb',
-                borderRadius: 4,
-            }, {
-                label: 'Role Avg',
-                data: [80, 85, 80, 85, 85],
-                backgroundColor: '#e5e7eb',
-                borderRadius: 4,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, max: 100, grid: { display: false } },
-                x: { grid: { display: false } }
-            },
-            plugins: {
-                legend: { position: 'bottom', labels: { boxWidth: 10, usePointStyle: true } }
-            }
+    // 2. Grammar Score
+    const grammarScore = Math.floor(Math.random() * (100 - 90) + 90);
+    const grammarValue = document.getElementById('grammar-score');
+    const grammarBar = document.getElementById('grammar-bar');
+
+    // Animate Grammar
+    let currentGrammar = 0;
+    const grammarInterval = setInterval(() => {
+        if (currentGrammar >= grammarScore) {
+            clearInterval(grammarInterval);
+            grammarBar.style.width = `${grammarScore}%`;
+        } else {
+            currentGrammar++;
+            grammarValue.textContent = currentGrammar;
         }
-    });
+    }, 20);
+
+    // 3. Formatting Score
+    const formatScore = Math.floor(Math.random() * (95 - 80) + 80);
+    const formatValue = document.getElementById('formatting-score');
+    const formatBar = document.getElementById('formatting-bar');
+
+    // Animate Formatting
+    let currentFormat = 0;
+    const formatInterval = setInterval(() => {
+        if (currentFormat >= formatScore) {
+            clearInterval(formatInterval);
+            formatBar.style.width = `${formatScore}%`;
+        } else {
+            currentFormat++;
+            formatValue.textContent = currentFormat;
+        }
+    }, 20);
 }
 
 function populateData() {
@@ -222,9 +224,9 @@ function populateData() {
     // Feedback
     const feedbackList = document.getElementById('feedback-list');
     const feedback = [
-        { text: "Quantify your achievements. Use numbers (e.g., 'Improved latency by 20%').", type: "alert" },
-        { text: "Add 'PyTorch' and 'TensorFlow' to your skills section to pass ATS filters.", type: "alert" },
-        { text: "Strong academic background detected. Highlight your thesis project.", type: "success" }
+        { text: "Formatting: Margins are slightly too narrow for some ATS parsers.", type: "alert" },
+        { text: "Grammar: Passive voice used frequently in 'Experience' section.", type: "alert" },
+        { text: "Keywords: Strong match for 'Python' and 'TensorFlow'.", type: "success" }
     ];
 
     feedbackList.innerHTML = feedback.map(item => `
