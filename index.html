@@ -42,17 +42,17 @@
                     interviews.
                 </p>
 
-                <div class="upload-container" id="drop-zone">
+                <div class="upload-container" id="drop-zone" style="cursor: pointer;">
                     <div class="upload-content">
                         <i data-lucide="file-up" class="upload-icon"></i>
                         <h3>Upload your resume</h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Drag & drop or click to browse (PDF,
-                            DOCX)</p>
-                        <button class="btn-primary" style="pointer-events: none;">Select Document</button>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Drag & drop or click anywhere to browse
+                            (PDF only)</p>
+                        <div class="btn-primary" style="margin-top: 1rem;">Select Document</div>
                     </div>
                     <div class="scanning-overlay"></div>
                 </div>
-                <input type="file" id="file-input" hidden accept=".pdf,.doc,.docx">
+                <input type="file" id="file-input" hidden accept=".pdf">
             </div>
         </section>
 
