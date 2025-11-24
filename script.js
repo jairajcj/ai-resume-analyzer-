@@ -26,11 +26,8 @@ gsap.from(".upload-container", { scale: 0.9, opacity: 0, duration: 1, delay: 1.2
 // Event Listeners for File Upload
 const selectBtn = document.querySelector('.upload-content .btn-primary');
 
-// Prevent infinite loop since input is inside dropZone
-fileInput.addEventListener('click', (e) => e.stopPropagation());
-
 selectBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent triggering dropZone click if nested (though it's not anymore, good practice)
     fileInput.click();
 });
 
