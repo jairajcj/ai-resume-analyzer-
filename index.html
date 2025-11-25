@@ -1,309 +1,288 @@
-<!DOCTYPE html>
-<html lang="en">
+</div>
+</header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Resume Analyzer - Smart Career Insights</title>
-    <meta name="description"
-        content="Advanced AI-powered resume analysis tool that provides grammar checking, formatting insights, ATS scoring, and intelligent job matching">
+<main class="card editor bg-gray-800 bg-opacity-20 rounded-xl shadow-lg p-4">
+    <div class="card" style="flex:1">
+        <div style="font-size:13px;color:var(--muted)">Detected sections</div>
+        <div id="sections" class="section-list" style="margin-top:8px">—</div>
+    </div>
+    <div class="card" style="width:220px">
+        <div style="font-size:13px;color:var(--muted)">Quick ATS match</div>
+        <div id="topRole" style="font-size:15px;margin-top:8px">—</div>
+    </div>
+    </div>
+</main>
 
-    <!-- Critical inline CSS for GitHub Pages compatibility -->
-    <style>
-        /* Ensure dark theme loads immediately */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0f0f1e;
-            color: #ffffff;
-            line-height: 1.6;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-    </style>
-
-    <link rel="stylesheet" href="./styles.css">
-
-    <!-- PDF.js for PDF text extraction -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-        // Configure PDF.js worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-</head>
-
-<body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="40" height="40" rx="12" fill="url(#logo-gradient)" />
-                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <defs>
-                            <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
-                                <stop offset="0%" stop-color="#6366f1" />
-                                <stop offset="100%" stop-color="#8b5cf6" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <span class="logo-text">ResumeAI</span>
-                </div>
-                <nav class="nav">
-                    <a href="#analyzer" class="nav-link active">Analyzer</a>
-                    <a href="#job-matcher" class="nav-link">Job Matcher</a>
-                    <a href="#tips" class="nav-link">Tips</a>
-                </nav>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Upload Section -->
-            <section class="upload-section" id="upload-section">
-                <div class="upload-container">
-                    <div class="upload-header">
-                        <h1 class="main-title">Analyze Your Resume with AI</h1>
-                        <p class="main-subtitle">Get instant feedback on grammar, formatting, ATS compatibility, and
-                            discover your perfect job match</p>
-                    </div>
-
-                    <div class="upload-area" id="upload-area">
-                        <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" hidden>
-                        <div class="upload-icon">
-                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                                <circle cx="32" cy="32" r="32" fill="url(#upload-gradient)" opacity="0.1" />
-                                <path d="M32 20V44M20 32H44" stroke="url(#upload-gradient)" stroke-width="3"
-                                    stroke-linecap="round" />
-                                <defs>
-                                    <linearGradient id="upload-gradient" x1="0" y1="0" x2="64" y2="64">
-                                        <stop offset="0%" stop-color="#6366f1" />
-                                        <stop offset="100%" stop-color="#8b5cf6" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        </div>
-                        <h3 class="upload-title">Drop your resume here</h3>
-                        <p class="upload-text">or click to browse</p>
-                        <p class="upload-formats">Supports PDF, DOC, DOCX</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Analysis Results Section -->
-            <section class="results-section hidden" id="results-section">
-                <div class="results-container">
-                    <!-- Overall Score Card -->
-                    <div class="score-card">
-                        <div class="score-header">
-                            <h2>Overall Resume Score</h2>
-                            <div class="score-circle" id="overall-score">
-                                <svg class="score-ring" width="160" height="160">
-                                    <circle class="score-ring-bg" cx="80" cy="80" r="70" />
-                                    <circle class="score-ring-progress" cx="80" cy="80" r="70" id="score-progress" />
-                                </svg>
-                                <div class="score-value" id="score-value">0</div>
-                            </div>
-                        </div>
-                        <div class="score-breakdown">
-                            <div class="score-item">
-                                <div class="score-circle-small">
-                                    <svg class="score-ring-small" width="120" height="120">
-                                        <defs>
-                                            <linearGradient id="ats-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stop-color="#3b82f6" />
-                                                <stop offset="100%" stop-color="#60a5fa" />
-                                            </linearGradient>
-                                        </defs>
-                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
-                                        <circle class="score-ring-small-progress ats-ring" cx="60" cy="60" r="50"
-                                            id="ats-ring" />
-                                    </svg>
-                                    <div class="score-number ats-color" id="ats-number">
-                                        <span class="score-number-value">0</span>
-                                        <span class="score-number-percent">%</span>
-                                    </div>
-                                </div>
-                                <span class="score-label">ATS Compatibility</span>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-circle-small">
-                                    <svg class="score-ring-small" width="120" height="120">
-                                        <defs>
-                                            <linearGradient id="grammar-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stop-color="#10b981" />
-                                                <stop offset="100%" stop-color="#34d399" />
-                                            </linearGradient>
-                                        </defs>
-                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
-                                        <circle class="score-ring-small-progress grammar-ring" cx="60" cy="60" r="50"
-                                            id="grammar-ring" />
-                                    </svg>
-                                    <div class="score-number grammar-color" id="grammar-number">
-                                        <span class="score-number-value">0</span>
-                                        <span class="score-number-percent">%</span>
-                                    </div>
-                                </div>
-                                <span class="score-label">Grammar & Spelling</span>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-circle-small">
-                                    <svg class="score-ring-small" width="120" height="120">
-                                        <defs>
-                                            <linearGradient id="format-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stop-color="#8b5cf6" />
-                                                <stop offset="100%" stop-color="#a78bfa" />
-                                            </linearGradient>
-                                        </defs>
-                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
-                                        <circle class="score-ring-small-progress format-ring" cx="60" cy="60" r="50"
-                                            id="format-ring" />
-                                    </svg>
-                                    <div class="score-number format-color" id="format-number">
-                                        <span class="score-number-value">0</span>
-                                        <span class="score-number-percent">%</span>
-                                    </div>
-                                </div>
-                                <span class="score-label">Formatting</span>
-                            </div>
-                            <div class="score-item">
-                                <div class="score-circle-small">
-                                    <svg class="score-ring-small" width="120" height="120">
-                                        <defs>
-                                            <linearGradient id="structure-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stop-color="#ec4899" />
-                                                <stop offset="100%" stop-color="#f472b6" />
-                                            </linearGradient>
-                                        </defs>
-                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
-                                        <circle class="score-ring-small-progress structure-ring" cx="60" cy="60" r="50"
-                                            id="structure-ring" />
-                                    </svg>
-                                    <div class="score-number structure-color" id="structure-number">
-                                        <span class="score-number-value">0</span>
-                                        <span class="score-number-percent">%</span>
-                                    </div>
-                                </div>
-                                <span class="score-label">Structure</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Issues & Recommendations -->
-                    <div class="issues-grid">
-                        <!-- Grammar Issues -->
-                        <div class="issue-card">
-                            <div class="issue-header">
-                                <div class="issue-icon grammar-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
-                                <h3>Grammar & Spelling</h3>
-                                <span class="issue-count" id="grammar-count">0</span>
-                            </div>
-                            <div class="issue-list" id="grammar-issues"></div>
-                        </div>
-
-                        <!-- Formatting Issues -->
-                        <div class="issue-card">
-                            <div class="issue-header">
-                                <div class="issue-icon format-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor"
-                                            stroke-width="2" />
-                                        <path d="M3 9H21M9 21V9" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </div>
-                                <h3>Formatting</h3>
-                                <span class="issue-count" id="format-count">0</span>
-                            </div>
-                            <div class="issue-list" id="format-issues"></div>
-                        </div>
-
-                        <!-- Structure Issues -->
-                        <div class="issue-card">
-                            <div class="issue-header">
-                                <div class="issue-icon structure-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path
-                                            d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z"
-                                            stroke="currentColor" stroke-width="2" />
-                                        <path d="M3 10H21M7 6V18" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </div>
-                                <h3>Structure</h3>
-                                <span class="issue-count" id="structure-count">0</span>
-                            </div>
-                            <div class="issue-list" id="structure-issues"></div>
-                        </div>
-                    </div>
-
-                    <!-- Role Recommendations -->
-                    <div class="recommendations-card">
-                        <h2 class="section-title">Recommended Roles</h2>
-                        <p class="section-subtitle">Based on your resume analysis, here are the roles that best match
-                            your profile</p>
-                        <div class="roles-grid" id="roles-grid"></div>
-                    </div>
-
-                    <!-- Job Matcher -->
-                    <div class="job-matcher-card">
-                        <h2 class="section-title">Job Matcher</h2>
-                        <p class="section-subtitle">Paste job descriptions to find your best matches</p>
-
-                        <div class="job-input-section">
-                            <textarea id="job-descriptions" class="job-textarea"
-                                placeholder="Paste job descriptions here (one per line or separated by blank lines)...&#10;&#10;Example:&#10;Senior Software Engineer - Full Stack&#10;Requirements: 5+ years experience in React, Node.js...&#10;&#10;Product Manager - Tech&#10;Requirements: 3+ years in product management..."></textarea>
-                            <button class="btn-primary" id="analyze-jobs-btn">
-                                <span>Analyze Job Matches</span>
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="job-matches-container hidden" id="job-matches-container">
-                            <h3 class="matches-title">Your Best Job Matches</h3>
-                            <div class="job-matches-grid" id="job-matches-grid"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Loading Overlay -->
-        <div class="loading-overlay hidden" id="loading-overlay">
-            <div class="loading-spinner">
-                <div class="spinner-ring"></div>
-                <div class="spinner-ring"></div>
-                <div class="spinner-ring"></div>
-            </div>
-            <p class="loading-text">Analyzing your resume...</p>
+<aside class="right w-full md:w-auto">
+    <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700">Scores</div>
+            <div style="font-size:12px;color:var(--muted)">0 - 100</div>
         </div>
+        <div class="scores" style="margin-top:12px">
+            <div class="score-pill">
+                <div class="num" id="formatScore">—</div>
+                <div class="lbl">Formatting</div>
+                <div class="progress">
+                    <div id="fmtBar" class="bar"></div>
+                </div>
+            </div>
+            <div class="score-pill">
+                <div class="num" id="grammarScore">—</div>
+                <div class="lbl">Grammar</div>
+                <div class="progress">
+                    <div id="gramBar" class="bar"></div>
+                </div>
+            </div>
+            <div class="score-pill">
+                <div class="num" id="structScore">—</div>
+                <div class="lbl">Structure</div>
+                <div class="progress">
+                    <div id="strBar" class="bar"></div>
+                </div>
+            </div>
+            <div class="score-pill">
+                <div class="num" id="atsScore">—</div>
+                <div class="lbl">ATS</div>
+                <div class="progress">
+                    <div id="atsBar" class="bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:12px;font-size:13px;color:var(--muted)">Top issues</div>
+        <div id="issues" class="issues" style="margin-top:8px;color:var(--muted)">—</div>
     </div>
 
-    <!-- Load configuration and AI service first -->
-    <script src="./config.js"></script>
-    <script src="./ai-service.js"></script>
-    <script src="./app.js"></script>
+    <div class="card">
+        <div style="font-weight:700">Role suggestions</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">Which roles this resume maps to best</div>
+        <div class="role-suggestions" id="roleList" style="margin-top:10px">—</div>
+    </div>
+
+    <div class="card">
+        <div style="font-weight:700">Highlights & fixes</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:8px">Click a suggestion to copy improved text
+            to clipboard</div>
+        <div id="fixes" style="margin-top:8px"></div>
+    </div>
+</aside>
+
+<footer>Built with simple client-side heuristics. For production, hook into serverside grammar APIs and PDF
+    parsers.</footer>
+</div>
+
+<script>
+    // Heuristics-based Resume Analyzer (vanilla JS)
+    const roleKeywords = {
+        "Software Engineer": ["javascript", "typescript", "react", "node", "python", "java", "c++", "git", "aws", "docker", "rest", "graphql", "ci/cd", "unit test", "algorithms"],
+        "Data Scientist": ["python", "r", "pandas", "numpy", "scikit", "machine learning", "deep learning", "tensorflow", "pytorch", "statistics", "model", "feature engineering", "data visualization", "sql"],
+        "Product Manager": ["roadmap", "stakeholder", "product strategy", "user research", "kpi", "okr", "a/b testing", "prioritization", "wireframes", "market research", "requirements"],
+        "UX Designer": ["figma", "prototyping", "user research", "usability", "wireframe", "interaction design", "visual design", "persona", "journey map", "accessibility"],
+        "Sales": ["quota", "pipeline", "crm", "salesforce", "prospecting", "lead generation", "b2b", "negotiation", "closing", "revenue"]
+    };
+
+    // utilities
+    function clamp(n) { return Math.max(0, Math.min(100, Math.round(n))) }
+    function setScore(id, num) { document.getElementById(id).textContent = num }
+    function setBar(id, percent) { document.getElementById(id).style.width = percent + '%' }
+
+    const ta = document.getElementById('resumeInput')
+    document.getElementById('btnLoad').onclick = () => document.getElementById('fileInput').click()
+    document.getElementById('fileInput').addEventListener('change', e => {
+        const f = e.target.files[0]; if (!f) return;
+        if (!f.name.endsWith('.txt')) { alert('Only .txt supported for now. Paste if PDF.'); return }
+        const r = new FileReader(); r.onload = () => ta.value = r.result; r.readAsText(f)
+    })
+    document.getElementById('btnClear').onclick = () => { ta.value = ''; clearUI() }
+    document.getElementById('btnAnalyze').onclick = analyze
+
+    function clearUI() {
+        setScore('formatScore', '—'); setBar('fmtBar', 0)
+        setScore('grammarScore', '—'); setBar('gramBar', 0)
+        setScore('structScore', '—'); setBar('strBar', 0)
+        setScore('atsScore', '—'); setBar('atsBar', 0)
+        document.getElementById('issues').textContent = '—'
+        document.getElementById('sections').textContent = '—'
+        document.getElementById('roleList').textContent = '—'
+        document.getElementById('topRole').textContent = '—'
+        document.getElementById('fixes').textContent = ''
+    }
+
+    function analyze() {
+        const text = ta.value.trim();
+        if (!text) { alert('Please paste your resume text first.'); return }
+
+        // Basic preprocessing
+        const lower = text.toLowerCase();
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter((l, i, arr) => !(l === '' && (i === 0 || i === arr.length - 1)));
+
+        // 1) Section detection
+        const sectionTerms = ['contact', 'summary', 'profile', 'experience', 'work experience', 'employment', 'education', 'skills', 'projects', 'certifications', 'achievements', 'publications', 'interests'];
+        const found = new Set();
+        for (const l of lines) {
+            for (const s of sectionTerms) { if (l.toLowerCase().startsWith(s)) found.add(s) }
+        }
+        document.getElementById('sections').textContent = (found.size ? Array.from(found).map(s => s[0].toUpperCase() + s.slice(1)).join(' · ') : 'No clear sections detected')
+
+        // 2) Formatting score heuristics
+        let fmtScore = 70;
+        // penalties/bonuses
+        // bullet consistency: lines that start with - or • or *
+        const bullets = lines.filter(l => /^(-|\u2022|\*)\s+/.test(l)).length
+        const hasBullets = bullets > 0
+        if (!hasBullets) fmtScore -= 8
+        // consistent section headings (all-caps or title): check lines longer than 2 words that are uppercase or end with ':'
+        const headings = lines.filter(l => /^[A-Z\s]{2,}$/.test(l) || /:$/.test(l)).length
+        if (headings < 2) fmtScore -= 6
+        // contact line: email or phone present
+        const hasEmail = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(text)
+        const hasPhone = /\+?\d{2,3}[\s-]?\(?\d{2,4}\)?[\s-]?\d{3,4}[\s-]?\d{2,4}/.test(text)
+        if (!hasEmail) fmtScore -= 10
+        if (!hasPhone) fmtScore -= 6
+        // font/format neutrality: presence of too many inline symbols or ascii art -> penalize
+        const weird = /[{}`~<>]/.test(text) ? 6 : 0
+        fmtScore -= weird
+
+        // 3) Structural score: presence of core sections
+        const required = ['contact', 'experience', 'education', 'skills']
+        let structScore = 50
+        let missing = []
+        for (const r of required) { if (Array.from(found).some(f => f.includes(r))) structScore += 12; else missing.push(r) }
+        // presence of bullets and dates
+        const hasDates = /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|\d{4})\b/.test(text)
+        if (hasBullets) structScore += 6
+        if (hasDates) structScore += 6
+        structScore = clamp(structScore)
+
+        // 4) Grammar score (simple heuristics)
+        // Checks: long sentences (>25 words), repeated whitespace, dangling fragments, many passive voice uses (was|were) + past participle heuristic)
+        const sentences = text.split(/[\.\!\?]\s+/).map(s => s.trim()).filter(Boolean)
+        let longCount = sentences.filter(s => s.split(/\s+/).length > 25).length
+        let passiveCount = (text.match(/\b(was|were|is|are|been|be)\s+\w+ed\b/g) || []).length
+        let capsWords = (text.match(/\b[A-Z]{2,}\b/g) || []).length
+        let grammarScore = 90 - longCount * 6 - passiveCount * 5 - Math.max(0, capsWords - 6)
+        // punctuation density
+        const punct = (text.match(/[\.\,;:\!\?]/g) || []).length
+        const words = Math.max(1, text.split(/\s+/).length)
+        const punctDensity = punct / words
+        if (punctDensity < 0.02) grammarScore -= 6
+        grammarScore = clamp(grammarScore)
+
+        // 5) ATS/Role fit: compute keyword matches for each role
+        const roleScores = {}
+        for (const role in roleKeywords) {
+            const kws = roleKeywords[role]
+            let hits = 0
+            for (const k of kws) {
+                const re = new RegExp('\\b' + escapeRegExp(k) + '\\b', 'i')
+                if (re.test(text)) hits++
+            }
+            // normalize to 0-100 by proportion of keywords matched + presence in title
+            const pct = Math.round((hits / kws.length) * 100)
+            roleScores[role] = { hits, pct }
+        }
+        // ATS score approximated as top role match * formatting/structure multipliers
+        const bestRole = Object.entries(roleScores).sort((a, b) => b[1].pct - a[1].pct)[0]
+        const atsBase = bestRole ? bestRole[1].pct : 0
+        const atsScore = clamp(Math.round(atsBase * 0.7 + (fmtScore * 0.15) + (structScore * 0.15)))
+
+        // Compose issues list
+        const issuesEl = document.getElementById('issues')
+        const issues = []
+        if (!hasEmail) issues.push('Missing email — add a professional email (e.g., name@domain.com).')
+        if (!hasPhone) issues.push('Missing phone number — include a contact phone number.')
+        if (missing.length) issues.push('Missing sections: ' + missing.join(', ') + '. Consider adding these.')
+        if (longCount) issues.push('Long sentences detected (' + longCount + '). Break complex sentences into shorter bullets.')
+        if (passiveCount) issues.push('Passive voice detected (' + passiveCount + '). Prefer active verbs ("led" vs "was responsible for").')
+        if (bullets === 0) issues.push('No bullet lists detected — use bullets for achievements and responsibilities.')
+        if (capsWords > 6) issues.push('Excess uppercase words detected — avoid ALL CAPS for large blocks of text.')
+
+        issuesEl.innerHTML = issues.length ? '<ul style="margin:6px 0 0 14px">' + issues.map(i => '<li>' + i + '</li>').join('') + '</ul>' : '<div style="color:var(--muted)">No major issues found. Nice!</div>'
+
+        // Fill scores to UI
+        fmtScore = clamp(fmtScore)
+        setScore('formatScore', fmtScore); setBar('fmtBar', fmtScore)
+        setScore('grammarScore', grammarScore); setBar('gramBar', grammarScore)
+        setScore('structScore', structScore); setBar('strBar', structScore)
+        setScore('atsScore', atsScore); setBar('atsBar', atsScore)
+
+        // Role suggestions UI
+        const roleList = document.getElementById('roleList'); roleList.innerHTML = ''
+        const sortedRoles = Object.entries(roleScores).sort((a, b) => b[1].pct - a[1].pct)
+        for (const [r, meta] of sortedRoles) {
+            const row = document.createElement('div'); row.className = 'role-row'
+            row.innerHTML = '<div style="font-weight:600">' + r + '</div><div style="text-align:right"><div style="font-size:13px">' + meta.pct + '% keyword match</div><div style="font-size:11px;color:var(--muted)">' + meta.hits + ' hits</div></div>'
+            roleList.appendChild(row)
+        }
+        document.getElementById('topRole').textContent = sortedRoles[0] ? sortedRoles[0][0] + ' — ' + sortedRoles[0][1].pct + '% match' : '—'
+
+        // produce suggested fixes (simple rewrite of summary + bullet tips)
+        const fixesEl = document.getElementById('fixes'); fixesEl.innerHTML = ''
+        // Example: if no summary, suggest one
+        if (!Array.from(found).some(f => f.includes('summary') || f.includes('profile'))) {
+            const suggestion = 'Add a 2-3 line professional summary that states title, years of experience, top skills, and value: e.g. "Software Engineer with 5+ years building web applications using JavaScript and AWS, focused on shipping reliable distributed systems and improving developer productivity."'
+            const b = document.createElement('div'); b.style.padding = '8px'; b.style.borderRadius = '8px'; b.style.background = 'rgba(255,255,255,0.01)'; b.style.fontSize = '13px'; b.innerHTML = '<div style="font-weight:700;margin-bottom:6px">Add a concise professional summary</div><div>' + suggestion + '</div>'
+            fixesEl.appendChild(b)
+        }
+
+        // If passive voice high, provide active-voice examples
+        if (passiveCount > 0) {
+            const b = document.createElement('div'); b.style.padding = '8px'; b.style.borderRadius = '8px'; b.style.background = 'rgba(255,255,255,0.01)'; b.style.fontSize = '13px'; b.style.marginTop = '8px'
+            b.innerHTML = '<div style="font-weight:700;margin-bottom:6px">Turn passive statements into active achievements</div><div>Passive: "Was responsible for migrating services to cloud."<br>Active: "Migrated 12 services to AWS, reducing deployment time by 40%."</div>'
+            fixesEl.appendChild(b)
+        }
+
+        // Provide quick copy button for suggested summary or fixes
+        Array.from(fixesEl.querySelectorAll('div')).forEach(d => {
+            d.style.position = 'relative'
+            const copyBtn = document.createElement('button'); copyBtn.className = 'btn'; copyBtn.style.position = 'absolute'; copyBtn.style.right = '8px'; copyBtn.style.top = '8px'; copyBtn.textContent = 'Copy'
+            copyBtn.onclick = () => { navigator.clipboard.writeText(d.innerText).then(() => { copyBtn.textContent = 'Copied'; setTimeout(() => copyBtn.textContent = 'Copy', 1400) }) }
+            d.appendChild(copyBtn)
+        })
+
+        // Highlight keywords within textarea by showing adjacent preview with highlights (simple)
+        showHighlightedPreview(text)
+
+        // small analytics in console
+        console.log('Resume analysis', { fmtScore, grammarScore, structScore, atsScore, roleScores })
+    }
+
+    function showHighlightedPreview(text) {
+        // create a small preview below textarea showing lines with highlighted role keywords
+        const containerId = 'previewHighlights'
+        let prev = document.getElementById(containerId)
+        if (prev) prev.remove()
+        const container = document.createElement('div'); container.id = containerId; container.style.marginTop = '12px'; container.style.padding = '10px'; container.style.borderRadius = '8px'; container.className = 'card'
+
+        const title = document.createElement('div'); title.style.fontSize = '13px'; title.style.color = 'var(--muted)'; title.textContent = 'Preview (keywords highlighted)'
+        container.appendChild(title)
+
+        const block = document.createElement('div'); block.style.marginTop = '8px'; block.style.fontSize = '13px'; block.style.lineHeight = '1.45'
+
+        // highlight role keywords
+        let preview = text.split('\n').slice(0, 12).map(l => escapeHtml(l)).join('\n')
+        const allKeywords = [].concat(...Object.values(roleKeywords))
+        for (const k of allKeywords) {
+            const re = new RegExp('(' + escapeRegExp(k) + ')', 'ig')
+            preview = preview.replace(re, '<span class="highlight">$1</span>')
+        }
+        block.innerHTML = '<pre style="white-space:pre-wrap;margin:0;font-family:inherit">' + preview + '</pre>'
+        container.appendChild(block)
+        document.querySelector('.editor').appendChild(container)
+    }
+
+    // small helper functions
+    function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') }
+    function escapeHtml(unsafe) { return unsafe.replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": "&#039;" }[m] }) }
+
+    // run a small demo sample when empty
+    const sample = `John Doe\nEmail: john.doe@example.com | +1 555-123-4567\n\nSummary:\nExperienced Software Engineer with 4+ years building web applications and services.\n\nExperience:\n- Software Engineer, Acme Corp (2021 - Present)\n  • Built REST APIs in Node.js and improved performance by 30%\n  • Led migration to AWS and Docker\n- Junior Engineer, Example Inc (2019 - 2021)\n  • Implemented features in React and collaborated with cross-functional teams\n\nEducation:\nB.S. in Computer Science, Somewhere University\\n\nSkills:\nJavaScript, React, Node.js, AWS, Docker, Git, SQL\n\nProjects:\n- Analytics dashboard to track key metrics.`
+
+    // Preload sample for demonstration
+    if (!ta.value) ta.value = sample
+
+</script>
 </body>
 
 </html>
