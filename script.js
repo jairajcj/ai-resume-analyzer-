@@ -28,7 +28,7 @@ function handleDragOver(e) {
 function handleDrop(e) {
     e.preventDefault();
     uploadArea.style.borderColor = 'var(--color-border)';
-    
+
     const files = e.dataTransfer.files;
     if (files.length > 0) {
         handleFile(files[0]);
@@ -49,10 +49,10 @@ async function handleFile(file) {
         alert('Please upload a PDF or DOC file');
         return;
     }
-    
+
     // Show loading
     showLoading();
-    
+
     // Simulate file reading and analysis
     setTimeout(() => {
         analyzeResume(file);
@@ -159,7 +159,7 @@ async function analyzeResume(file) {
             }
         ]
     };
-    
+
     analysisResults = analysis;
     displayResults(analysis);
     hideLoading();
@@ -170,21 +170,21 @@ function displayResults(analysis) {
     // Hide upload, show results
     uploadSection.classList.add('hidden');
     resultsSection.classList.remove('hidden');
-    
+
     // Animate overall score
     animateScore(analysis.overallScore);
-    
+
     // Animate individual scores
     animateScoreBar('ats', analysis.scores.ats);
     animateScoreBar('grammar', analysis.scores.grammar);
     animateScoreBar('format', analysis.scores.formatting);
     animateScoreBar('structure', analysis.scores.structure);
-    
+
     // Display issues
     displayIssues('grammar', analysis.grammarIssues);
     displayIssues('format', analysis.formattingIssues);
     displayIssues('structure', analysis.structureIssues);
-    
+
     // Display recommended roles
     displayRecommendedRoles(analysis.recommendedRoles);
 }
@@ -193,7 +193,7 @@ function animateScore(score) {
     const scoreValue = document.getElementById('score-value');
     const scoreProgress = document.getElementById('score-progress');
     const circumference = 2 * Math.PI * 70; // radius = 70
-    
+
     // Add gradient definition
     if (!document.querySelector('#score-gradient')) {
         const svg = document.querySelector('.score-ring');
@@ -204,21 +204,21 @@ function animateScore(score) {
         gradient.setAttribute('y1', '0%');
         gradient.setAttribute('x2', '100%');
         gradient.setAttribute('y2', '100%');
-        
+
         const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
         stop1.setAttribute('offset', '0%');
         stop1.setAttribute('stop-color', '#6366f1');
-        
+
         const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
         stop2.setAttribute('offset', '100%');
         stop2.setAttribute('stop-color', '#8b5cf6');
-        
+
         gradient.appendChild(stop1);
         gradient.appendChild(stop2);
         defs.appendChild(gradient);
         svg.appendChild(defs);
     }
-    
+
     // Animate number
     let current = 0;
     const increment = score / 50;
@@ -230,7 +230,7 @@ function animateScore(score) {
         }
         scoreValue.textContent = Math.floor(current);
     }, 20);
-    
+
     // Animate ring
     const offset = circumference - (score / 100) * circumference;
     setTimeout(() => {
@@ -239,13 +239,17 @@ function animateScore(score) {
 }
 
 function animateScoreBar(type, score) {
-    const bar = document.getElementById(`${type}-score`);
+    const ring = document.getElementById(`${type}-ring`);
     const number = document.getElementById(`${type}-number`);
-    
+    const circumference = 2 * Math.PI * 50; // radius = 50
+
+    // Animate ring
+    const offset = circumference - (score / 100) * circumference;
     setTimeout(() => {
-        bar.style.width = `${score}%`;
+        ring.style.strokeDashoffset = offset;
     }, 200);
-    
+
+    // Animate number
     let current = 0;
     const increment = score / 50;
     const timer = setInterval(() => {
@@ -254,17 +258,20 @@ function animateScoreBar(type, score) {
             current = score;
             clearInterval(timer);
         }
-        number.textContent = `${Math.floor(current)}%`;
+        const valueSpan = number.querySelector('.score-number-value');
+        if (valueSpan) {
+            valueSpan.textContent = Math.floor(current);
+        }
     }, 20);
 }
 
 function displayIssues(type, issues) {
     const container = document.getElementById(`${type}-issues`);
     const count = document.getElementById(`${type}-count`);
-    
+
     count.textContent = issues.length;
     container.innerHTML = '';
-    
+
     issues.forEach((issue, index) => {
         const issueEl = document.createElement('div');
         issueEl.className = `issue-item ${issue.type}`;
@@ -280,7 +287,7 @@ function displayIssues(type, issues) {
 function displayRecommendedRoles(roles) {
     const container = document.getElementById('roles-grid');
     container.innerHTML = '';
-    
+
     roles.forEach((role, index) => {
         const roleEl = document.createElement('div');
         roleEl.className = 'role-card';
@@ -297,19 +304,19 @@ function displayRecommendedRoles(roles) {
 // ===== Job Matching =====
 function analyzeJobMatches() {
     const jobText = jobDescriptions.value.trim();
-    
+
     if (!jobText) {
         alert('Please enter job descriptions to analyze');
         return;
     }
-    
+
     if (!analysisResults) {
         alert('Please upload and analyze a resume first');
         return;
     }
-    
+
     showLoading();
-    
+
     // Simulate AI job matching
     setTimeout(() => {
         const jobs = parseJobDescriptions(jobText);
@@ -322,12 +329,12 @@ function analyzeJobMatches() {
 function parseJobDescriptions(text) {
     // Simple parsing - split by double newlines or look for common patterns
     const jobSections = text.split(/\n\s*\n/).filter(section => section.trim().length > 50);
-    
+
     return jobSections.map((section, index) => {
         const lines = section.split('\n').filter(line => line.trim());
         const title = lines[0] || `Job Position ${index + 1}`;
         const description = lines.slice(1).join(' ');
-        
+
         return {
             title: title.substring(0, 100),
             description: description.substring(0, 500),
@@ -339,14 +346,14 @@ function parseJobDescriptions(text) {
 function matchJobsToResume(jobs) {
     // Simulate AI matching with realistic scores and reasons
     const keywords = ['software', 'engineer', 'developer', 'full stack', 'react', 'node', 'python', 'java', 'cloud', 'aws', 'leadership', 'team', 'agile'];
-    
+
     return jobs.map(job => {
         const jobLower = job.fullText.toLowerCase();
-        
+
         // Calculate match score based on keyword presence
         let matchScore = 60 + Math.floor(Math.random() * 35); // Base 60-95
         const matchedKeywords = keywords.filter(kw => jobLower.includes(kw));
-        
+
         // Generate match reasons
         const reasons = [];
         if (matchedKeywords.length > 5) {
@@ -364,13 +371,13 @@ function matchJobsToResume(jobs) {
         if (jobLower.includes('team') || jobLower.includes('collaboration')) {
             reasons.push('Collaborative skills valued');
         }
-        
+
         // Ensure at least 2 reasons
         if (reasons.length < 2) {
             reasons.push('Industry experience relevant');
             reasons.push('Educational background fits');
         }
-        
+
         return {
             ...job,
             matchScore,
@@ -383,21 +390,21 @@ function displayJobMatches(matches) {
     const container = document.getElementById('job-matches-grid');
     jobMatchesContainer.classList.remove('hidden');
     container.innerHTML = '';
-    
+
     if (matches.length === 0) {
         container.innerHTML = '<p style="color: var(--color-text-secondary);">No jobs found. Please enter job descriptions in the format shown in the placeholder.</p>';
         return;
     }
-    
+
     matches.forEach((match, index) => {
         const matchEl = document.createElement('div');
         matchEl.className = 'job-match-card';
         matchEl.style.animationDelay = `${index * 0.1}s`;
-        
-        const reasonsHTML = match.reasons.map(reason => 
+
+        const reasonsHTML = match.reasons.map(reason =>
             `<span class="match-reason">${reason}</span>`
         ).join('');
-        
+
         matchEl.innerHTML = `
             <div class="job-match-header">
                 <div>
@@ -410,10 +417,10 @@ function displayJobMatches(matches) {
                 ${reasonsHTML}
             </div>
         `;
-        
+
         container.appendChild(matchEl);
     });
-    
+
     // Scroll to results
     jobMatchesContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -430,7 +437,7 @@ function hideLoading() {
 // ===== Initialize =====
 document.addEventListener('DOMContentLoaded', () => {
     console.log('AI Resume Analyzer initialized');
-    
+
     // Add some entrance animations
     const uploadContainer = document.querySelector('.upload-container');
     if (uploadContainer) {
