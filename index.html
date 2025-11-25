@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Analyzer - Smart Career Insights</title>
-    <meta name="description" content="Advanced AI-powered resume analysis tool that provides grammar checking, formatting insights, ATS scoring, and intelligent job matching">
+    <meta name="description"
+        content="Advanced AI-powered resume analysis tool that provides grammar checking, formatting insights, ATS scoring, and intelligent job matching">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Header -->
@@ -17,12 +22,13 @@
             <div class="header-content">
                 <div class="logo">
                     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="40" height="40" rx="12" fill="url(#logo-gradient)"/>
-                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect width="40" height="40" rx="12" fill="url(#logo-gradient)" />
+                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round" />
                         <defs>
                             <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
-                                <stop offset="0%" stop-color="#6366f1"/>
-                                <stop offset="100%" stop-color="#8b5cf6"/>
+                                <stop offset="0%" stop-color="#6366f1" />
+                                <stop offset="100%" stop-color="#8b5cf6" />
                             </linearGradient>
                         </defs>
                     </svg>
@@ -43,19 +49,21 @@
                 <div class="upload-container">
                     <div class="upload-header">
                         <h1 class="main-title">Analyze Your Resume with AI</h1>
-                        <p class="main-subtitle">Get instant feedback on grammar, formatting, ATS compatibility, and discover your perfect job match</p>
+                        <p class="main-subtitle">Get instant feedback on grammar, formatting, ATS compatibility, and
+                            discover your perfect job match</p>
                     </div>
-                    
+
                     <div class="upload-area" id="upload-area">
                         <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" hidden>
                         <div class="upload-icon">
                             <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                                <circle cx="32" cy="32" r="32" fill="url(#upload-gradient)" opacity="0.1"/>
-                                <path d="M32 20V44M20 32H44" stroke="url(#upload-gradient)" stroke-width="3" stroke-linecap="round"/>
+                                <circle cx="32" cy="32" r="32" fill="url(#upload-gradient)" opacity="0.1" />
+                                <path d="M32 20V44M20 32H44" stroke="url(#upload-gradient)" stroke-width="3"
+                                    stroke-linecap="round" />
                                 <defs>
                                     <linearGradient id="upload-gradient" x1="0" y1="0" x2="64" y2="64">
-                                        <stop offset="0%" stop-color="#6366f1"/>
-                                        <stop offset="100%" stop-color="#8b5cf6"/>
+                                        <stop offset="0%" stop-color="#6366f1" />
+                                        <stop offset="100%" stop-color="#8b5cf6" />
                                     </linearGradient>
                                 </defs>
                             </svg>
@@ -84,32 +92,84 @@
                         </div>
                         <div class="score-breakdown">
                             <div class="score-item">
+                                <div class="score-circle-small">
+                                    <svg class="score-ring-small" width="120" height="120">
+                                        <defs>
+                                            <linearGradient id="ats-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#3b82f6" />
+                                                <stop offset="100%" stop-color="#60a5fa" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
+                                        <circle class="score-ring-small-progress ats-ring" cx="60" cy="60" r="50"
+                                            id="ats-ring" />
+                                    </svg>
+                                    <div class="score-number ats-color" id="ats-number">
+                                        <span class="score-number-value">0</span>
+                                        <span class="score-number-percent">%</span>
+                                    </div>
+                                </div>
                                 <span class="score-label">ATS Compatibility</span>
-                                <div class="score-bar">
-                                    <div class="score-bar-fill" id="ats-score" style="width: 0%"></div>
-                                </div>
-                                <span class="score-number" id="ats-number">0%</span>
                             </div>
                             <div class="score-item">
+                                <div class="score-circle-small">
+                                    <svg class="score-ring-small" width="120" height="120">
+                                        <defs>
+                                            <linearGradient id="grammar-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#10b981" />
+                                                <stop offset="100%" stop-color="#34d399" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
+                                        <circle class="score-ring-small-progress grammar-ring" cx="60" cy="60" r="50"
+                                            id="grammar-ring" />
+                                    </svg>
+                                    <div class="score-number grammar-color" id="grammar-number">
+                                        <span class="score-number-value">0</span>
+                                        <span class="score-number-percent">%</span>
+                                    </div>
+                                </div>
                                 <span class="score-label">Grammar & Spelling</span>
-                                <div class="score-bar">
-                                    <div class="score-bar-fill" id="grammar-score" style="width: 0%"></div>
-                                </div>
-                                <span class="score-number" id="grammar-number">0%</span>
                             </div>
                             <div class="score-item">
+                                <div class="score-circle-small">
+                                    <svg class="score-ring-small" width="120" height="120">
+                                        <defs>
+                                            <linearGradient id="format-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#8b5cf6" />
+                                                <stop offset="100%" stop-color="#a78bfa" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
+                                        <circle class="score-ring-small-progress format-ring" cx="60" cy="60" r="50"
+                                            id="format-ring" />
+                                    </svg>
+                                    <div class="score-number format-color" id="format-number">
+                                        <span class="score-number-value">0</span>
+                                        <span class="score-number-percent">%</span>
+                                    </div>
+                                </div>
                                 <span class="score-label">Formatting</span>
-                                <div class="score-bar">
-                                    <div class="score-bar-fill" id="format-score" style="width: 0%"></div>
-                                </div>
-                                <span class="score-number" id="format-number">0%</span>
                             </div>
                             <div class="score-item">
-                                <span class="score-label">Structure</span>
-                                <div class="score-bar">
-                                    <div class="score-bar-fill" id="structure-score" style="width: 0%"></div>
+                                <div class="score-circle-small">
+                                    <svg class="score-ring-small" width="120" height="120">
+                                        <defs>
+                                            <linearGradient id="structure-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#ec4899" />
+                                                <stop offset="100%" stop-color="#f472b6" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="score-ring-small-bg" cx="60" cy="60" r="50" />
+                                        <circle class="score-ring-small-progress structure-ring" cx="60" cy="60" r="50"
+                                            id="structure-ring" />
+                                    </svg>
+                                    <div class="score-number structure-color" id="structure-number">
+                                        <span class="score-number-value">0</span>
+                                        <span class="score-number-percent">%</span>
+                                    </div>
                                 </div>
-                                <span class="score-number" id="structure-number">0%</span>
+                                <span class="score-label">Structure</span>
                             </div>
                         </div>
                     </div>
@@ -121,9 +181,12 @@
                             <div class="issue-header">
                                 <div class="issue-icon grammar-icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
                                 <h3>Grammar & Spelling</h3>
@@ -137,8 +200,9 @@
                             <div class="issue-header">
                                 <div class="issue-icon format-icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M3 9H21M9 21V9" stroke="currentColor" stroke-width="2"/>
+                                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor"
+                                            stroke-width="2" />
+                                        <path d="M3 9H21M9 21V9" stroke="currentColor" stroke-width="2" />
                                     </svg>
                                 </div>
                                 <h3>Formatting</h3>
@@ -152,8 +216,10 @@
                             <div class="issue-header">
                                 <div class="issue-icon structure-icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M3 10H21M7 6V18" stroke="currentColor" stroke-width="2"/>
+                                        <path
+                                            d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z"
+                                            stroke="currentColor" stroke-width="2" />
+                                        <path d="M3 10H21M7 6V18" stroke="currentColor" stroke-width="2" />
                                     </svg>
                                 </div>
                                 <h3>Structure</h3>
@@ -166,7 +232,8 @@
                     <!-- Role Recommendations -->
                     <div class="recommendations-card">
                         <h2 class="section-title">Recommended Roles</h2>
-                        <p class="section-subtitle">Based on your resume analysis, here are the roles that best match your profile</p>
+                        <p class="section-subtitle">Based on your resume analysis, here are the roles that best match
+                            your profile</p>
                         <div class="roles-grid" id="roles-grid"></div>
                     </div>
 
@@ -174,17 +241,15 @@
                     <div class="job-matcher-card">
                         <h2 class="section-title">Job Matcher</h2>
                         <p class="section-subtitle">Paste job descriptions to find your best matches</p>
-                        
+
                         <div class="job-input-section">
-                            <textarea 
-                                id="job-descriptions" 
-                                class="job-textarea" 
-                                placeholder="Paste job descriptions here (one per line or separated by blank lines)...&#10;&#10;Example:&#10;Senior Software Engineer - Full Stack&#10;Requirements: 5+ years experience in React, Node.js...&#10;&#10;Product Manager - Tech&#10;Requirements: 3+ years in product management..."
-                            ></textarea>
+                            <textarea id="job-descriptions" class="job-textarea"
+                                placeholder="Paste job descriptions here (one per line or separated by blank lines)...&#10;&#10;Example:&#10;Senior Software Engineer - Full Stack&#10;Requirements: 5+ years experience in React, Node.js...&#10;&#10;Product Manager - Tech&#10;Requirements: 3+ years in product management..."></textarea>
                             <button class="btn-primary" id="analyze-jobs-btn">
                                 <span>Analyze Job Matches</span>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </button>
                         </div>
@@ -211,4 +276,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
