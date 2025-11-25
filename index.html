@@ -1,193 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HireSight AI - Resume Analyzer</title>
+    <title>AI Resume Analyzer - Smart Career Insights</title>
+    <meta name="description" content="Advanced AI-powered resume analysis tool that provides grammar checking, formatting insights, ATS scoring, and intelligent job matching">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="enhanced-upload.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- PDF.js for PDF parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <div class="background-gradient"></div>
-    <div class="grid-overlay"></div>
-
-    <main id="app">
-        <!-- Hero Section -->
-        <section id="hero" class="hero-section">
-            <nav class="navbar">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
                 <div class="logo">
-                    <i data-lucide="scan-search"></i>
-                    <span>HireSight.AI</span>
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="12" fill="url(#logo-gradient)"/>
+                        <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="logo-text">ResumeAI</span>
                 </div>
-                <button class="btn-secondary">Sign In</button>
-            </nav>
+                <nav class="nav">
+                    <a href="#analyzer" class="nav-link active">Analyzer</a>
+                    <a href="#job-matcher" class="nav-link">Job Matcher</a>
+                    <a href="#tips" class="nav-link">Tips</a>
+                </nav>
+            </div>
+        </header>
 
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    See Your Resume Like a <span class="gradient-text">Recruiter</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Get instant, AI-powered feedback on your resume. Identify gaps, optimize keywords, and land more
-                    interviews.
-                </p>
-
-                <div class="upload-container" id="drop-zone" style="cursor: pointer;">
-                    <div class="upload-content">
-                        <i data-lucide="file-up" class="upload-icon"></i>
-                        <h3>Upload your resume</h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Drag & drop or click anywhere to browse
-                            (PDF only)</p>
-                        <div class="btn-primary" style="margin-top: 1rem;">Select Document</div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="upload-section">
+                <div class="upload-container">
+                    <div class="upload-header">
+                        <h1 class="main-title">Analyze Your Resume with AI</h1>
+                        <p class="main-subtitle">Get instant feedback on grammar, formatting, ATS compatibility, and discover your perfect job match</p>
                     </div>
-                    <div class="scanning-overlay"></div>
-                </div>
-                <input type="file" id="file-input" hidden accept=".pdf">
-            </div>
-        </section>
-
-        <!-- Loading / Analysis Section -->
-        <section id="analysis" class="analysis-section hidden">
-            <div class="scanner-container">
-                <div class="scanner-line"></div>
-                <div class="document-preview">
-                    <div class="doc-line" style="width: 80%"></div>
-                    <div class="doc-line" style="width: 60%"></div>
-                    <div class="doc-line" style="width: 90%"></div>
-                    <div class="doc-line" style="width: 70%"></div>
-                    <div class="doc-line" style="width: 85%"></div>
-                    <div class="doc-line" style="width: 50%"></div>
-                    <div class="doc-line" style="width: 75%"></div>
-                </div>
-            </div>
-            <h2 class="analysis-text">Analyzing Content...</h2>
-            <p style="color: var(--text-muted);">Extracting text and analyzing resume quality</p>
-        </section>
-
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="dashboard-section hidden">
-            <header class="dashboard-header">
-                <div>
-                    <h2>Analysis Results</h2>
-                    <p style="color: var(--text-muted);" id="filename-display">Analyzing your resume...</p>
-                </div>
-                <button class="btn-secondary" id="reset-btn">Upload New</button>
-            </header>
-
-            <div class="dashboard-grid">
-                <!-- Left Column: Resume Preview -->
-                <div class="resume-preview-card">
-                    <h3>Document Preview</h3>
-                    <div id="resume-text-preview"
-                        style="width: 100%; height: 100%; background: #f3f4f6; border-radius: 8px; padding: 1.5rem; overflow-y: auto; max-height: 600px; font-size: 0.85rem; line-height: 1.6; color: #374151; white-space: pre-wrap;">
-                        [Resume text will appear here...]
+                    
+                    <div class="upload-area" id="upload-area">
+                        <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" hidden>
+                        <div class="upload-icon">
+                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                                <circle cx="32" cy="32" r="32" fill="url(#upload-gradient)" opacity="0.1"/>
+                                <path d="M32 20V44M20 32H44" stroke="url(#upload-gradient)" stroke-width="3" stroke-linecap="round"/>
+                                <defs>
+                                    <linearGradient id="upload-gradient" x1="0" y1="0" x2="64" y2="64">
+                                        <stop offset="0%" stop-color="#6366f1"/>
+                                        <stop offset="100%" stop-color="#8b5cf6"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <h3 class="upload-title">Drop your resume here</h3>
+                        <p class="upload-text">or click to browse</p>
+                        <p class="upload-formats">Supports PDF, DOC, DOCX</p>
                     </div>
                 </div>
+            </section>
 
-                <!-- Right Column: Analysis Data -->
-                <div class="analysis-column">
-                    <!-- Scores Grid -->
-                    <div class="scores-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <!-- Main ATS Score -->
-                        <div class="card score-card"
-                            style="grid-column: span 2; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white;">
-                            <div class="score-content">
-                                <h3 style="color: rgba(255,255,255,0.8);">ATS Compatibility Score</h3>
-                                <div class="score-value-large" id="ats-score" style="color: white;">0</div>
-                                <p class="score-label" id="ats-message" style="color: rgba(255,255,255,0.9);">
-                                    Analyzing...</p>
-                            </div>
-                            <div class="score-chart-mini">
-                                <canvas id="atsChart"></canvas>
+            <!-- Analysis Results Section -->
+            <section class="results-section hidden" id="results-section">
+                <div class="results-container">
+                    <!-- Overall Score Card -->
+                    <div class="score-card">
+                        <div class="score-header">
+                            <h2>Overall Resume Score</h2>
+                            <div class="score-circle" id="overall-score">
+                                <svg class="score-ring" width="160" height="160">
+                                    <circle class="score-ring-bg" cx="80" cy="80" r="70" />
+                                    <circle class="score-ring-progress" cx="80" cy="80" r="70" id="score-progress" />
+                                </svg>
+                                <div class="score-value" id="score-value">0</div>
                             </div>
                         </div>
-
-                        <!-- Grammar Score -->
-                        <div class="card">
-                            <h3>Grammar & Spelling</h3>
-                            <div style="display: flex; align-items: end; gap: 0.5rem; margin-top: 0.5rem;">
-                                <span id="grammar-score"
-                                    style="font-size: 2.5rem; font-weight: 700; color: var(--text-main);">0</span>
-                                <span style="color: var(--text-muted); margin-bottom: 8px;">/ 100</span>
-                            </div>
-                            <div class="progress-bar"
-                                style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 10px;">
-                                <div id="grammar-bar"
-                                    style="width: 0%; height: 100%; background: #10b981; border-radius: 3px; transition: width 1s ease;">
+                        <div class="score-breakdown">
+                            <div class="score-item">
+                                <span class="score-label">ATS Compatibility</span>
+                                <div class="score-bar">
+                                    <div class="score-bar-fill" id="ats-score" style="width: 0%"></div>
                                 </div>
+                                <span class="score-number" id="ats-number">0%</span>
                             </div>
-                        </div>
-
-                        <!-- Formatting Score -->
-                        <div class="card">
-                            <h3>Formatting</h3>
-                            <div style="display: flex; align-items: end; gap: 0.5rem; margin-top: 0.5rem;">
-                                <span id="formatting-score"
-                                    style="font-size: 2.5rem; font-weight: 700; color: var(--text-main);">0</span>
-                                <span style="color: var(--text-muted); margin-bottom: 8px;">/ 100</span>
-                            </div>
-                            <div class="progress-bar"
-                                style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 10px;">
-                                <div id="formatting-bar"
-                                    style="width: 0%; height: 100%; background: #f59e0b; border-radius: 3px; transition: width 1s ease;">
+                            <div class="score-item">
+                                <span class="score-label">Grammar & Spelling</span>
+                                <div class="score-bar">
+                                    <div class="score-bar-fill" id="grammar-score" style="width: 0%"></div>
                                 </div>
+                                <span class="score-number" id="grammar-number">0%</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Formatting</span>
+                                <div class="score-bar">
+                                    <div class="score-bar-fill" id="format-score" style="width: 0%"></div>
+                                </div>
+                                <span class="score-number" id="format-number">0%</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">Structure</span>
+                                <div class="score-bar">
+                                    <div class="score-bar-fill" id="structure-score" style="width: 0%"></div>
+                                </div>
+                                <span class="score-number" id="structure-number">0%</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- AI-Detected Mistakes -->
-                    <div class="card mistakes-card">
-                        <h3>🔍 Detected Issues</h3>
-                        <div class="mistakes-list" id="mistakes-list">
-                            <!-- Mistakes injected via JS -->
-                            <div class="empty-state">
-                                <i data-lucide="loader" class="spinning"></i>
-                                <p>Analyzing resume for issues...</p>
+                    <!-- Issues & Recommendations -->
+                    <div class="issues-grid">
+                        <!-- Grammar Issues -->
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-icon grammar-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <h3>Grammar & Spelling</h3>
+                                <span class="issue-count" id="grammar-count">0</span>
                             </div>
+                            <div class="issue-list" id="grammar-issues"></div>
+                        </div>
+
+                        <!-- Formatting Issues -->
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-icon format-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M3 9H21M9 21V9" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <h3>Formatting</h3>
+                                <span class="issue-count" id="format-count">0</span>
+                            </div>
+                            <div class="issue-list" id="format-issues"></div>
+                        </div>
+
+                        <!-- Structure Issues -->
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div class="issue-icon structure-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M3 10H21M7 6V18" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <h3>Structure</h3>
+                                <span class="issue-count" id="structure-count">0</span>
+                            </div>
+                            <div class="issue-list" id="structure-issues"></div>
                         </div>
                     </div>
 
-                    <!-- Strengths -->
-                    <div class="card strengths-card">
-                        <h3>✨ Strengths</h3>
-                        <ul class="strengths-list" id="strengths-list">
-                            <!-- Strengths injected via JS -->
-                            <li class="empty-state">Analyzing your resume strengths...</li>
-                        </ul>
+                    <!-- Role Recommendations -->
+                    <div class="recommendations-card">
+                        <h2 class="section-title">Recommended Roles</h2>
+                        <p class="section-subtitle">Based on your resume analysis, here are the roles that best match your profile</p>
+                        <div class="roles-grid" id="roles-grid"></div>
                     </div>
 
-                    <!-- Recommended Roles -->
-                    <div class="card roles-card">
-                        <h3>🎯 Best Matched Roles</h3>
-                        <div class="roles-list" id="roles-list">
-                            <!-- Roles injected via JS -->
+                    <!-- Job Matcher -->
+                    <div class="job-matcher-card">
+                        <h2 class="section-title">Job Matcher</h2>
+                        <p class="section-subtitle">Paste job descriptions to find your best matches</p>
+                        
+                        <div class="job-input-section">
+                            <textarea 
+                                id="job-descriptions" 
+                                class="job-textarea" 
+                                placeholder="Paste job descriptions here (one per line or separated by blank lines)...&#10;&#10;Example:&#10;Senior Software Engineer - Full Stack&#10;Requirements: 5+ years experience in React, Node.js...&#10;&#10;Product Manager - Tech&#10;Requirements: 3+ years in product management..."
+                            ></textarea>
+                            <button class="btn-primary" id="analyze-jobs-btn">
+                                <span>Analyze Job Matches</span>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
                         </div>
-                    </div>
 
-                    <!-- Detailed Feedback -->
-                    <div class="card feedback-card">
-                        <h3>💡 Key Improvements</h3>
-                        <ul class="feedback-list" id="feedback-list">
-                            <!-- Feedback injected via JS -->
-                        </ul>
+                        <div class="job-matches-container hidden" id="job-matches-container">
+                            <h3 class="matches-title">Your Best Job Matches</h3>
+                            <div class="job-matches-grid" id="job-matches-grid"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
 
-    <script src="main.js"></script>
+        <!-- Loading Overlay -->
+        <div class="loading-overlay hidden" id="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <p class="loading-text">Analyzing your resume...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
-
 </html>
