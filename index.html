@@ -7,7 +7,33 @@
     <title>AI Resume Analyzer - Smart Career Insights</title>
     <meta name="description"
         content="Advanced AI-powered resume analysis tool that provides grammar checking, formatting insights, ATS scoring, and intelligent job matching">
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- Critical inline CSS for GitHub Pages compatibility -->
+    <style>
+        /* Ensure dark theme loads immediately */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f0f1e;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+    <link rel="stylesheet" href="./styles.css">
+
+    <!-- PDF.js for PDF text extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Configure PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -274,7 +300,10 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Load configuration and AI service first -->
+    <script src="./config.js"></script>
+    <script src="./ai-service.js"></script>
+    <script src="./app.js"></script>
 </body>
 
 </html>
