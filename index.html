@@ -2,64 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Resume Analyzer</title>
+    <title>AI Resume Analyzer with Gemini</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.mjs" type="module"></script>
 </head>
 <body>
-
     <div class="container">
-        <h1>🤖 AI Resume Analyzer</h1>
-        <p>Upload your resume (PDF or DOCX) to get instant scores on ATS compatibility, formatting, and grammar.</p>
+        <h1>Gemini Resume Analyzer 🚀</h1>
+        <p>Upload your resume (PDF or TXT) and an optional job description for tailored feedback.</p>
+        
+        <label for="resume-file">Upload Resume File (PDF/TXT):</label>
+        <input type="file" id="resume-file" accept=".pdf,.txt" required>
+        
+        <label for="job-description">Paste Job Description (Optional):</label>
+        <textarea id="job-description" rows="5" placeholder="Paste the job description here..."></textarea>
 
-        <div class="upload-area">
-            <label for="resume-upload" class="upload-label">
-                <span id="file-name">Click to Select or Drag & Drop File</span>
-                <input type="file" id="resume-upload" accept=".pdf, .docx" hidden>
-            </label>
-            <button id="analyze-button" disabled>Analyze Resume</button>
-            <div id="loading-spinner" class="spinner"></div>
-        </div>
+        <button onclick="analyzeResume()">Analyze Resume</button>
 
-        <div id="results-area" class="results-hidden">
-            <h2>📊 Analysis Report</h2>
-            <div id="overall-score" class="overall-score"></div>
+        <hr>
 
-            <div class="score-card-container">
-                <div class="score-card" id="ats-card">
-                    <h3>🎯 ATS Score</h3>
-                    <div class="score-value">--</div>
-                    <p class="feedback-summary">Measures keyword matching and ATS readability.</p>
-                </div>
-
-                <div class="score-card" id="formatting-card">
-                    <h3>⚙️ Formatting</h3>
-                    <div class="score-value">--</div>
-                    <p class="feedback-summary">Checks consistency, spacing, and use of bullet points.</p>
-                </div>
-
-                <div class="score-card" id="grammar-card">
-                    <h3>✍️ Grammar</h3>
-                    <div class="score-value">--</div>
-                    <p class="feedback-summary">Assesses spelling, punctuation, and active voice.</p>
-                </div>
-
-                <div class="score-card" id="structural-card">
-                    <h3>📐 Structural</h3>
-                    <div class="score-value">--</div>
-                    <p class="feedback-summary">Analyzes content flow, quantification, and length.</p>
-                </div>
-            </div>
-
-            <div class="feedback-detail">
-                <h3>Detailed Feedback</h3>
-                <ul id="feedback-list">
-                    </ul>
-            </div>
+        <h2>Analysis Results</h2>
+        <div id="results-container">
+            <p>Upload a file and click "Analyze Resume" to see the results.</p>
         </div>
     </div>
-
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script> 
 </body>
 </html>
