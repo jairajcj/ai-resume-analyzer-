@@ -6,7 +6,7 @@
 
 // --- 1. CRITICAL: API Configuration ---
 // !!! REPLACE THIS WITH YOUR VALID, FULL-LENGTH GEMINI API KEY !!!
-const API_KEY = "AIzaSyA_B96ffq3_-elchR5jDIamtnuSF8x9uQc";
+const API_KEY = "AIzaSyDZYMym5ZYNOCILiAFR6ZZ9RO2762glxK0";
 const MODEL_NAME = "gemini-2.5-flash";
 
 // Access the imported PDF.js library via the window object
